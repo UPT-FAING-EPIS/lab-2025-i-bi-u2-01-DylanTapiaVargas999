@@ -13,45 +13,48 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: T2
-      id: t2
+    - name: t1
+      id: t1
       uses: classroom-resources/autograding-command-grader@v1
       with:
-        test-name: T2
+        test-name: t1
         setup-command: ''
-        command: cat ejercicio02.sql | (( $(grep -cE 'dim|fact') < 3 )) && exit 1
+        command: ls -la modelo*.sql
         timeout: 10
         max-score: 5
-    - name: T2
+    - name: t2
       id: t2
       uses: classroom-resources/autograding-command-grader@v1
       with:
-        test-name: T2
+        test-name: t2
         setup-command: ''
-        command: cat ejercicio02.sql | (( $(grep -cE 'dim|fact') < 3 )) && exit 1
+        command: cat infra/main.tf | grep azure
         timeout: 10
-    - name: T3
+        max-score: 5
+    - name: t3
       id: t3
       uses: classroom-resources/autograding-command-grader@v1
       with:
-        test-name: T3
+        test-name: t3
         setup-command: ''
-        command: cat ejercicio03.sql | (( $(grep -cE 'dim|fact') < 3 )) && exit 1
+        command: cat .github/worflows/deployInfra.yml | grep terraform
         timeout: 10
-    - name: T4
+        max-score: 5
+    - name: t4
       id: t4
       uses: classroom-resources/autograding-command-grader@v1
       with:
-        test-name: T4
+        test-name: t4
         setup-command: ''
-        command: cat README.md  | (( $(grep -c 'Mermaid') < 3 )) && exit 1
+        command: car .github/worflows/deployDatabase.yml | grep liquibase
         timeout: 10
         max-score: 5
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
       env:
+        T1_RESULTS: "${{steps.t1.outputs.result}}"
         T2_RESULTS: "${{steps.t2.outputs.result}}"
         T3_RESULTS: "${{steps.t3.outputs.result}}"
         T4_RESULTS: "${{steps.t4.outputs.result}}"
       with:
-        runners: t2,t2,t3,t4
+        runners: t1,t2,t3,t4
