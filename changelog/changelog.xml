@@ -8,6 +8,11 @@
 
     <!-- CLIENTE -->
     <changeSet id="1" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="CLIENTE"/>
+            </not>
+        </preConditions>
         <createTable tableName="CLIENTE">
             <column name="id_cliente" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -21,6 +26,11 @@
 
     <!-- PROYECTO -->
     <changeSet id="2" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PROYECTO"/>
+            </not>
+        </preConditions>
         <createTable tableName="PROYECTO">
             <column name="id_proyecto" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -42,6 +52,11 @@
 
     <!-- EMPRESA -->
     <changeSet id="3" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="EMPRESA"/>
+            </not>
+        </preConditions>
         <createTable tableName="EMPRESA">
             <column name="id_empresa" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -54,6 +69,11 @@
 
     <!-- RESPONSABLE -->
     <changeSet id="4" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="RESPONSABLE"/>
+            </not>
+        </preConditions>
         <createTable tableName="RESPONSABLE">
             <column name="id_responsable" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -75,6 +95,11 @@
 
     <!-- PAIS -->
     <changeSet id="5" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PAIS"/>
+            </not>
+        </preConditions>
         <createTable tableName="PAIS">
             <column name="id_pais" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -87,6 +112,11 @@
 
     <!-- LOCALIDAD -->
     <changeSet id="6" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="LOCALIDAD"/>
+            </not>
+        </preConditions>
         <createTable tableName="LOCALIDAD">
             <column name="id_localidad" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -108,6 +138,11 @@
 
     <!-- PAQUETE_TRABAJO -->
     <changeSet id="7" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="PAQUETE_TRABAJO"/>
+            </not>
+        </preConditions>
         <createTable tableName="PAQUETE_TRABAJO">
             <column name="id_paquete_trabajo" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
