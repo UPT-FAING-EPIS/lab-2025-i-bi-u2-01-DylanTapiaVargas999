@@ -1,9 +1,5 @@
 -- SQL Script for the Original E/R Diagram (Transactional Database)
 -- Database: SistemaEnviosER
-DROP DATABASE IF EXISTS SistemaEnviosER;
-CREATE DATABASE SistemaEnviosER;
-USE SistemaEnviosER;
-
 -- Table: GRUPO
 CREATE TABLE GRUPO (
     id_grupo INT PRIMARY KEY AUTO_INCREMENT,

@@ -1,9 +1,5 @@
 -- SQL Script for the Original E/R Diagram (Transactional Database)
 -- Database: SistemaGestionProyectosER
-DROP DATABASE IF EXISTS SistemaGestionProyectosER;
-CREATE DATABASE SistemaGestionProyectosER;
-USE SistemaGestionProyectosER;
-
 -- Table: CLIENTE
 CREATE TABLE CLIENTE (
     id_cliente INT PRIMARY KEY AUTO_INCREMENT,

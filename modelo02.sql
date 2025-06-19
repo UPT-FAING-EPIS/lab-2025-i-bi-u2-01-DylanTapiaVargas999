@@ -1,9 +1,5 @@
 -- SQL Script for the Original E/R Diagram (Transactional Database)
 -- Database: SistemaReservasER
-DROP DATABASE IF EXISTS SistemaReservasER;
-CREATE DATABASE SistemaReservasER;
-USE SistemaReservasER;
-
 -- Table: TIPO (Client Type)
 CREATE TABLE TIPO (
     id_tipo INT PRIMARY KEY AUTO_INCREMENT,
