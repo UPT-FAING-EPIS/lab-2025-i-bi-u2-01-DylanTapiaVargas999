@@ -49,19 +49,23 @@ jobs:
       run: |
         Install-Module -Name SqlServer -Force -SkipPublisherCheck -AllowClobber
 
-    - name: Ejecutar script SQL para restauración
+    - name: Ejecutar scripts SQL para restauración
       shell: pwsh
       run: |
         $serverName = "${{ secrets.SQL_SERVER }}.database.windows.net"
         $databaseName = "${{ secrets.SQL_DB }}"
         $username = "${{ secrets.SQL_USERNAME }}"
         $password = "${{ secrets.SQL_PASSWORD }}"
-        $scriptPath = "bd.sql"
-        if (Test-Path $scriptPath) {
-          $sqlScript = Get-Content -Path $scriptPath -Raw
-          $connectionString = "Server=$serverName;Database=$databaseName;User Id=$username;Password=$password;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-          Invoke-Sqlcmd -ConnectionString $connectionString -Query $sqlScript
-        } else {
-          Write-Error "No se encontró el archivo $scriptPath"
-          exit 1
+        $scripts = @("modelo01.sql", "modelo02.sql", "modelo03.sql")
+
+        foreach ($scriptPath in $scripts) {
+          if (Test-Path $scriptPath) {
+            Write-Host "Ejecutando $scriptPath..."
+            $sqlScript = Get-Content -Path $scriptPath -Raw
+            $connectionString = "Server=$serverName;Database=$databaseName;User Id=$username;Password=$password;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+            Invoke-Sqlcmd -ConnectionString $connectionString -Query $sqlScript
+          } else {
+            Write-Error "No se encontró el archivo $scriptPath"
+            exit 1
+          }
         }
