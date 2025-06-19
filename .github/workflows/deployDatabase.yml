@@ -1,0 +1,25 @@
+name: Deploy Database
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'changelog/**'
+      - '.github/workflows/deployDatabase.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy database with Liquibase
+        uses: liquibase-github-actions/update@v4.32.0
+        with:
+          changelogFile: changelog/changelog.xml
+          url: jdbc:sqlserver://${{ secrets.SQL_SERVER }}.database.windows.net:1433;database=${{ secrets.SQL_DB }};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+          username: ${{ secrets.SQL_USERNAME }}
+          password: ${{ secrets.SQL_PASSWORD }}

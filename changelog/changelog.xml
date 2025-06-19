@@ -1,0 +1,148 @@
+    <?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- CLIENTE -->
+    <changeSet id="1" author="liquibase">
+        <createTable tableName="CLIENTE">
+            <column name="id_cliente" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nombre_cliente" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="telefono" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- PROYECTO -->
+    <changeSet id="2" author="liquibase">
+        <createTable tableName="PROYECTO">
+            <column name="id_proyecto" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nombre_proyecto" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="id_cliente" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+            baseTableName="PROYECTO"
+            baseColumnNames="id_cliente"
+            constraintName="fk_proyecto_cliente"
+            referencedTableName="CLIENTE"
+            referencedColumnNames="id_cliente"/>
+    </changeSet>
+
+    <!-- EMPRESA -->
+    <changeSet id="3" author="liquibase">
+        <createTable tableName="EMPRESA">
+            <column name="id_empresa" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nombre_empresa" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- RESPONSABLE -->
+    <changeSet id="4" author="liquibase">
+        <createTable tableName="RESPONSABLE">
+            <column name="id_responsable" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nombre_responsable" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="id_empresa" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+            baseTableName="RESPONSABLE"
+            baseColumnNames="id_empresa"
+            constraintName="fk_responsable_empresa"
+            referencedTableName="EMPRESA"
+            referencedColumnNames="id_empresa"/>
+    </changeSet>
+
+    <!-- PAIS -->
+    <changeSet id="5" author="liquibase">
+        <createTable tableName="PAIS">
+            <column name="id_pais" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nombre_pais" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- LOCALIDAD -->
+    <changeSet id="6" author="liquibase">
+        <createTable tableName="LOCALIDAD">
+            <column name="id_localidad" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nombre_localidad" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="id_pais" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint 
+            baseTableName="LOCALIDAD"
+            baseColumnNames="id_pais"
+            constraintName="fk_localidad_pais"
+            referencedTableName="PAIS"
+            referencedColumnNames="id_pais"/>
+    </changeSet>
+
+    <!-- PAQUETE_TRABAJO -->
+    <changeSet id="7" author="liquibase">
+        <createTable tableName="PAQUETE_TRABAJO">
+            <column name="id_paquete_trabajo" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fecha" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="costos" type="DECIMAL(18,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_proyecto" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_responsable" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_localidad" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint 
+            baseTableName="PAQUETE_TRABAJO" baseColumnNames="id_proyecto"
+            constraintName="fk_paquete_proyecto"
+            referencedTableName="PROYECTO" referencedColumnNames="id_proyecto"/>
+
+        <addForeignKeyConstraint 
+            baseTableName="PAQUETE_TRABAJO" baseColumnNames="id_responsable"
+            constraintName="fk_paquete_responsable"
+            referencedTableName="RESPONSABLE" referencedColumnNames="id_responsable"/>
+
+        <addForeignKeyConstraint 
+            baseTableName="PAQUETE_TRABAJO" baseColumnNames="id_localidad"
+            constraintName="fk_paquete_localidad"
+            referencedTableName="LOCALIDAD" referencedColumnNames="id_localidad"/>
+    </changeSet>
+
+</databaseChangeLog>
