@@ -1,11 +1,11 @@
-name: Infraestructura + Script SQL en Azure
+name: Infraestructura + Script SQL en Azure( terraform )
 
 on:
   push:
     branches: [main]
 
 jobs:
-  deploy-lab3-infra-and-restore:
+  deploy-lab1-infra-and-restore:
     runs-on: windows-latest
 
     steps:
