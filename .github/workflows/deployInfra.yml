@@ -1,0 +1,67 @@
+name: Infraestructura + Script SQL en Azure
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-lab3-infra-and-restore:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout del repositorio
+      uses: actions/checkout@v3
+
+    - name: Login a Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.6.6
+
+    - name: Crear archivo terraform.tfvars
+      run: |
+        echo "azure_subscription_id = \"${{ secrets.SUBSCRIPTION_ID }}\"" > ./infra/terraform.tfvars
+        echo "azure_client_id = \"${{ secrets.CLIENT_ID }}\"" >> ./infra/terraform.tfvars
+        echo "azure_client_secret = \"${{ secrets.CLIENT_SECRET }}\"" >> ./infra/terraform.tfvars
+        echo "azure_tenant_id = \"${{ secrets.TENANT_ID }}\"" >> ./infra/terraform.tfvars
+        echo "sql_admin = \"${{ secrets.SQL_USERNAME }}\"" >> ./infra/terraform.tfvars
+        echo "sql_password = \"${{ secrets.SQL_PASSWORD }}\"" >> ./infra/terraform.tfvars
+        echo "sql_server_name = \"${{ secrets.SQL_SERVER }}\"" >> ./infra/terraform.tfvars
+        echo "database_name = \"${{ secrets.SQL_DB }}\"" >> ./infra/terraform.tfvars
+
+    - name: Terraform Init
+      working-directory: ./infra
+      run: terraform init
+
+    - name: Terraform Plan
+      working-directory: ./infra
+      run: terraform plan -var-file="terraform.tfvars" -out="main.tfplan"
+
+    - name: Terraform Apply
+      working-directory: ./infra
+      run: terraform apply -auto-approve "main.tfplan"
+
+    - name: Instalar módulo SqlServer para PowerShell
+      run: |
+        Install-Module -Name SqlServer -Force -SkipPublisherCheck -AllowClobber
+
+    - name: Ejecutar script SQL para restauración
+      shell: pwsh
+      run: |
+        $serverName = "${{ secrets.SQL_SERVER }}.database.windows.net"
+        $databaseName = "${{ secrets.SQL_DB }}"
+        $username = "${{ secrets.SQL_USERNAME }}"
+        $password = "${{ secrets.SQL_PASSWORD }}"
+        $scriptPath = "bd.sql"
+        if (Test-Path $scriptPath) {
+          $sqlScript = Get-Content -Path $scriptPath -Raw
+          $connectionString = "Server=$serverName;Database=$databaseName;User Id=$username;Password=$password;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+          Invoke-Sqlcmd -ConnectionString $connectionString -Query $sqlScript
+        } else {
+          Write-Error "No se encontró el archivo $scriptPath"
+          exit 1
+        }
