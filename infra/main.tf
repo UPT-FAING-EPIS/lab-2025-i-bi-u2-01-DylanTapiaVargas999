@@ -47,6 +47,6 @@ resource "azurerm_mssql_database" "lap_u2_1_db" {
 resource "azurerm_mssql_firewall_rule" "allow_my_ip" {
   name             = "AllowMyIP"
   server_id        = azurerm_mssql_server.lap_u2_1_sql_server.id
-  start_ip_address = "38.250.158.150"
-  end_ip_address   = "38.250.158.150"
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "255.255.255.255"
 }
